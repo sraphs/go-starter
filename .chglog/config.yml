@@ -1,0 +1,39 @@
+style: github
+template: CHANGELOG.tpl.md
+info:
+  title: CHANGELOG
+  repository_url: 
+options:
+  commits:
+    filters:
+      Type:
+        - feat
+        - fix
+        - docs
+        - style
+        - refactor
+        - perf
+        - test
+        - chore
+        - revert
+  commit_groups:
+    title_maps:
+      feat: ✨Features
+      fix: 🐞Bug Fixes
+      docs: 📄Documentations
+      style: 🌈Style Improvements
+      refactor: ⚙️Code Refactoring
+      perf: 🕜Performance Improvements
+      test: ✅Tests
+      chore: 🚀Chores
+      revert: ⏪Reverts
+  header:
+    pattern: "^(?:(\\x{00a9}|\\x{00ae}|[\\x{2000}-\\x{3300}]|\\x{d83c}[\\x{d000}-\\x{dfff}]|\\x{d83d}[\\x{d000}-\\x{dfff}]|\\x{d83e}[\\x{d000}-\\x{dfff}]))?(\\w*)(?:\\(([\\w\\$\\.\\-\\*\\s]*)\\))?\\:\\s(.*)$"
+    pattern_maps:
+      - Emoji
+      - Type
+      - Scope
+      - Subject
+  notes:
+    keywords:
+      - BREAKING CHANGE
