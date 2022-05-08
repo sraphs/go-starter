@@ -54,11 +54,9 @@ test: ## Run tests
 .PHONY: fmt
 fmt:  ## Run gofmt linter
 	@ $(MAKE) --no-print-directory log-$@
-	@for d in `go list` ; do \
-		if [ "`gofmt -l -s $$GOPATH/src/$$d | tee /dev/stderr`" ]; then \
-			echo "^ improperly formatted go files" && echo && exit 1; \
-		fi \
-	done
+	@if [ "`gofmt -l -s *.go | tee /dev/stderr`" ]; then \
+		echo "^ improperly formatted go files" && echo && exit 1; \
+	fi \
 
 .PHONY: vet
 vet: ## Run go vet linter
