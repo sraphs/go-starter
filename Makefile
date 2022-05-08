@@ -93,7 +93,7 @@ build: ## Build
 ##@ Release
 
 .PHONY: changelog
-changelog: build  ## Generate changelog
+changelog:  ## Generate changelog
 	@ $(MAKE) --no-print-directory log-$@
 	git-chglog --next-tag $(VERSION) --repository-url $(REPOSITORY_URL) -o CHANGELOG.md
 
