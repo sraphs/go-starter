@@ -2,6 +2,7 @@
 VERSION ?= $(shell git describe --tags --always)
 GOVERSION := $(shell go version | cut -d ' ' -f 3 | cut -d '.' -f 2)
 GO_MODULE_NAME := sraph.com/go/go-starter
+REPOSITORY_URL := $(shell git remote get-url origin | sed -e 's|git@\(.*\):\(.*\)\.git|https://\1/\2|g')
 
 # Go variables
 GO      ?= go
@@ -94,7 +95,7 @@ build: ## Build
 .PHONY: changelog
 changelog: build  ## Generate changelog
 	@ $(MAKE) --no-print-directory log-$@
-	git-chglog --repository-url $(git remote get-url origin | sed -e "s|git@\(.*\):\(.*\)\.git|https://\1/\2|g") -o CHANGELOG.md
+	git-chglog --next-tag $(VERSION) --repository-url $(REPOSITORY_URL) -o CHANGELOG.md
 
 .PHONY: release
 release: changelog  ## Release a new tag
