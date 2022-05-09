@@ -12,7 +12,7 @@
 ## Install
 
 ```bash
-go install xxxx@latest
+go get github.com/sraphs/go-starter
 ```
 
 ## Usage
