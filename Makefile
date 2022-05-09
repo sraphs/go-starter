@@ -1,7 +1,7 @@
 # Build variables
 VERSION ?= $(shell git describe --tags --always)
 GOVERSION := $(shell go version | cut -d ' ' -f 3 | cut -d '.' -f 2)
-GO_MODULE_NAME := sraph.com/go/go-starter
+GO_MODULE_NAME := github.com/sraphs/go-starter
 REPOSITORY_URL := $(shell git remote get-url origin | sed -e 's|git@\(.*\):\(.*\)\.git|https://\1/\2|g')
 
 # Go variables
