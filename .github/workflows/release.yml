@@ -2,30 +2,56 @@ name: Release
 
 on:
   push:
+    branches:
+      - "main"
+      - "releases/**"
     tags:
-      - '*'
+      - v*
+  pull_request:
+    branches:
+      - "releases/**"
+    types: [opened, reopened, synchronize]
+
+env:
+  GO_VERSION: 1.18
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: google-github-actions/release-please-action@v3
+      - name: "Checkout repository"
+        uses: actions/checkout@v3
         with:
-          release-type: go
-          package-name: release-please-action
-          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false}]'
-      - uses: actions/checkout@v2
-      - name: tag major and minor versions
-        if: ${{ steps.release.outputs.release_created }}
+          fetch-depth: 0
+      - name: "Setup go environment"
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          check-latest: true
+      - name: "Cache Go modules"
+        uses: actions/cache@v3
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: "Setup Environment"
         run: |
-          git config user.name hydrz
-          git config user.email n.haoyuan@gmail.com
-          git remote add gh-token "https://${{ secrets.GITHUB_TOKEN }}@github.com/google-github-actions/release-please-action.git"
-          git tag -d v${{ steps.release.outputs.major }} || true
-          git tag -d v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} || true
-          git push origin :v${{ steps.release.outputs.major }} || true
-          git push origin :v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} || true
-          git tag -a v${{ steps.release.outputs.major }} -m "Release v${{ steps.release.outputs.major }}"
-          git tag -a v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }} -m "Release v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}"
-          git push origin v${{ steps.release.outputs.major }}
-          git push origin v${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}
+          echo "VERSION=$(git describe --tags --always)" >> $GITHUB_ENV
+          echo "GIT_REPO_URL=$(git remote get-url origin | sed -e 's|git@\(.*\):\(.*\)\.git|https://\1/\2|g')" >> $GITHUB_ENV
+      - name: Install dependencies
+        run: |
+          go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
+      - name: Generate CHANGELOG.md
+        run: |
+          git-chglog --config=.github/CHANGELOG/config.yml --repository-url=${GIT_REPO_URL} -o CHANGELOG.md ${VERSION}
+          git add CHANGELOG.md
+          git commit -m "📄docs: update changelog for ${VERSION}"
+          git push origin main
+      - name: GoReleaser
+        uses: goreleaser/goreleaser-action@v1
+        with:
+          version: latest
+          args: release --rm-dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

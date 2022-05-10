@@ -1,30 +1,8 @@
 
-<a name="v1.0.4"></a>
-## [v1.0.4](https://github.com/sraphs/go-starter.git/compare/1.0.3...v1.0.4)
+<a name="v1.0.1"></a>
+## [v1.0.1](/compare/v1.0.0...v1.0.1)
 
 > 2022-05-10
-
-
-<a name="1.0.3"></a>
-## [1.0.3](https://github.com/sraphs/go-starter.git/compare/v1.0.3...1.0.3)
-
-> 2022-05-10
-
-
-<a name="v1.0.3"></a>
-## [v1.0.3](https://github.com/sraphs/go-starter.git/compare/v0.0.3...v1.0.3)
-
-> 2022-05-10
-
-
-<a name="v0.0.3"></a>
-## [v0.0.3](https://github.com/sraphs/go-starter.git/compare/v1.0.0...v0.0.3)
-
-> 2022-05-10
-
-### Pull Requests
-
-* Merge pull request [#1](https://github.com/sraphs/go-starter.git/issues/1) from sraphs/test_pr
 
 
 <a name="v1.0.0"></a>
@@ -34,6 +12,7 @@
 
 ### ✨Features
 
+* release-please-action
 * remove .chglog to scripts
 * add editorconfig
 * gopls formatting.local
@@ -43,4 +22,8 @@
 * .gitignore
 * Makefile
 * github template
+
+### Pull Requests
+
+* Merge pull request [#1](/issues/1) from sraphs/test_pr
 

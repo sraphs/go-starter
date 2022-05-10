@@ -27,7 +27,6 @@ LDFLAGS ?= "-s -w -X main.version=$(VERSION)"
 .PHONY: init
 init: ## Init environment
 	@ $(MAKE) --no-print-directory log-$@
-	go install golang.org/x/tools/cmd/stringer@latest
 	go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
 
 .PHONY: rename
@@ -40,7 +39,8 @@ rename: ## Rename Go module refactoring
 		&& read ans && [ $${ans:-N} = y ] \
 		&& echo -n "Please wait..." \
 		&& find . -type f -not -path '*/\.*' -exec sed -i "s|${MOD_NAME}|$${new_module_name}|g" {} \; \
-		&& echo "new go module-name: '$${new_module_name}'!"
+		&& echo "new go module-name: '$${new_module_name}'!" \
+        && git add . && git commit -m "rename go module-name to '$${new_module_name}'"
 
 ###############
 ##@ Development
@@ -96,14 +96,6 @@ lint: ## Run golint linter
 build: ## Build
 	@ $(MAKE) --no-print-directory log-$@
 	CGO_ENABLED=0 $(GOHOST) build -ldflags=$(LDFLAGS) ./...
-
-###########
-##@ Release
-
-.PHONY: release
-release: ## Generate changelog and build release. e.g. VERSION=v0.0.1 make release.
-	@ $(MAKE) --no-print-directory log-$@
-	@sh -c "'$(CURDIR)/scripts/release.sh'"
 
 ########
 ##@ Help
