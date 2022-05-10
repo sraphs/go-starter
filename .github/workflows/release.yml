@@ -4,13 +4,8 @@ on:
   push:
     branches:
       - "main"
-      - "releases/**"
     tags:
       - v*
-  pull_request:
-    branches:
-      - "releases/**"
-    types: [opened, reopened, synchronize]
 
 env:
   GO_VERSION: 1.18
