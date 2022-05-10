@@ -1,4 +1,10 @@
 
+<a name="v1.0.3"></a>
+## [v1.0.3](https://github.com/sraphs/go-starter.git/compare/v0.0.3...v1.0.3)
+
+> 0001-01-01
+
+
 <a name="v0.0.3"></a>
 ## [v0.0.3](https://github.com/sraphs/go-starter.git/compare/v1.0.0...v0.0.3)
 
