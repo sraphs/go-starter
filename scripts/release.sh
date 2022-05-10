@@ -16,6 +16,6 @@ git-chglog --next-tag ${VERSION} --repository-url ${GIT_REPO_URL} -o ../CHANGELO
 cd -
 
 git add CHANGELOG.md
-git commit -m "🚀chore: update changelog for $(VERSION)" 
-git tag $(VERSION)
-git push origin main $(VERSION)
+git commit -m "🚀chore: update changelog for ${VERSION}" 
+git tag ${VERSION}
+git push origin main ${VERSION}
