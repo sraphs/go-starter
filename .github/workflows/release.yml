@@ -29,10 +29,6 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
-      - name: "Setup Environment"
-        run: |
-          echo "VERSION=$(git describe --tags --always)" >> $GITHUB_ENV
-          echo "GIT_REPO_URL=$(git remote get-url origin | sed -e 's|git@\(.*\):\(.*\)\.git|https://\1/\2|g')" >> $GITHUB_ENV
       - name: GoReleaser
         uses: goreleaser/goreleaser-action@v1
         with:

@@ -28,6 +28,7 @@ LDFLAGS ?= "-s -w -X main.version=$(VERSION)"
 init: ## Init environment
 	@ $(MAKE) --no-print-directory log-$@
 	go install github.com/goreleaser/goreleaser@latest
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin 
 
 .PHONY: rename
 rename: ## Rename Go module refactoring
@@ -56,38 +57,19 @@ clean: ## Clean workspace
 	go clean
 
 .PHONY: check 
-check: test fmt vet lint ## Run tests and linters
+check: test vet lint ## Run tests and linters
 
 .PHONY: test
 test: ## Run tests
 	@ $(MAKE) --no-print-directory log-$@
 	@ $(MAKE) --no-print-directory log-$@
-	go test -covermode atomic -coverprofile coverage.out ./...
+	go test -race -coverprofile coverage.out -covermode=atomic ./...
 	go tool cover -func=coverage.out
-
-
-.PHONY: fmt
-fmt:  ## Run gofmt linter
-	@ $(MAKE) --no-print-directory log-$@
-	@if [ "`gofmt -l -s *.go | tee /dev/stderr`" ]; then \
-		echo "^ improperly formatted go files" && echo && exit 1; \
-	fi \
-
-.PHONY: vet
-vet: ## Run go vet linter
-	@ $(MAKE) --no-print-directory log-$@
-	@if [ "`go vet | tee /dev/stderr`" ]; then \
-		echo "^ go vet errors!" && echo && exit 1; \
-	fi
 
 .PHONY: lint
 lint: ## Run golint linter
 	@ $(MAKE) --no-print-directory log-$@
-	@for d in `go list` ; do \
-		if [ "`golint $$d | tee /dev/stderr`" ]; then \
-			echo "^ golint errors!" && echo && exit 1; \
-		fi \
-	done
+	golangci-lint run --fast
 
 #########
 ##@ Build
