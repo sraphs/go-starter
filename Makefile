@@ -1,21 +1,28 @@
-# Build variables
-VERSION ?= $(shell git describe --tags --always)
-GOVERSION := $(shell go version | cut -d ' ' -f 3 | cut -d '.' -f 2)
-GO_MODULE_NAME := github.com/sraphs/go-starter
-REPOSITORY_URL := $(shell git remote get-url origin | sed -e 's|git@\(.*\):\(.*\)\.git|https://\1/\2|g')
+MOD_NAME := github.com/sraphs/go-starter
+
+# Git variables
+GIT_COMMIT    = $(shell git rev-parse HEAD)
+GIT_SHA       = $(shell git rev-parse --short HEAD)
+GIT_TAG       = $(shell git describe --tags --always)
+GIT_DIRTY     = $(shell test -n "`git status --porcelain`" && echo "dirty" || echo "clean")
+GIT_REPO_URL  = $(shell git remote get-url origin | sed -e 's|git@\(.*\):\(.*\)\.git|https://\1/\2|g')
 
 # Go variables
-GO      ?= go
-GOOS    := $(shell $(GO) env GOOS)
-GOARCH  := $(shell $(GO) env GOARCH)
-GOHOST  := GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO)
+GO        ?= go
+GOOS      := $(shell $(GO) env GOOS)
+GOARCH    := $(shell $(GO) env GOARCH)
+GOHOST    := GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO)
+GOVERSION := $(shell go version | cut -d ' ' -f 3 | cut -d '.' -f 2)
+
+# Build variables
+VERSION  ?= $(GIT_TAG)
 
 LDFLAGS ?= "-s -w -X main.version=$(VERSION)"
 
 .DEFAULT_GOAL := help
 
 ###############
-##@ Development
+##@ Initial
 
 .PHONY: init
 init: ## Init environment
@@ -32,8 +39,16 @@ rename: ## Rename Go module refactoring
 		&& echo -n "Are you sure? [y/N]" \
 		&& read ans && [ $${ans:-N} = y ] \
 		&& echo -n "Please wait..." \
-		&& find . -type f -not -path '*/\.*' -exec sed -i "s|${GO_MODULE_NAME}|$${new_module_name}|g" {} \; \
+		&& find . -type f -not -path '*/\.*' -exec sed -i "s|${MOD_NAME}|$${new_module_name}|g" {} \; \
 		&& echo "new go module-name: '$${new_module_name}'!"
+
+###############
+##@ Development
+
+.PHONY: dev
+dev: ## Dev
+	@ $(MAKE) --no-print-directory log-$@
+	CGO_ENABLED=0 $(GOHOST) run -ldflags=$(LDFLAGS) ./...
 
 .PHONY: clean
 clean: ## Clean workspace
@@ -74,11 +89,6 @@ lint: ## Run golint linter
 		fi \
 	done
 
-.PHONY: dev
-dev: ## Dev
-	@ $(MAKE) --no-print-directory log-$@
-	CGO_ENABLED=0 $(GOHOST) run -ldflags=$(LDFLAGS) ./...
-
 #########
 ##@ Build
 
@@ -90,18 +100,10 @@ build: ## Build
 ###########
 ##@ Release
 
-.PHONY: changelog
-changelog:  ## Generate changelog
-	@ $(MAKE) --no-print-directory log-$@
-	git-chglog --next-tag $(VERSION) --repository-url $(REPOSITORY_URL) -o CHANGELOG.md
-
 .PHONY: release
-release: changelog  ## Release a new tag
+release: ## Generate changelog and build release. e.g. VERSION=v0.0.1 make release.
 	@ $(MAKE) --no-print-directory log-$@
-	git add CHANGELOG.md
-	git commit -m "🚀chore: update changelog for $(VERSION)" 
-	git tag $(VERSION)
-	git push origin main $(VERSION)
+	@sh -c "'$(CURDIR)/scripts/release.sh'"
 
 ########
 ##@ Help
@@ -122,6 +124,21 @@ help:   ## Display this help
 				printf "\n%s%s%s\n", nocol, substr($$0, 5), nocol \
 			} \
 		' $(MAKEFILE_LIST)
+
+.PHONY: info
+info: ## Display build info
+	@ $(MAKE) --no-print-directory log-$@
+	@echo "Mod Name:           ${MOD_NAME}"
+	@echo "Version:            ${VERSION}"
+	@echo ""
+	@echo "Git Tag:            ${GIT_TAG}"
+	@echo "Git Commit:         ${GIT_COMMIT}"
+	@echo "Git Tree State:     ${GIT_DIRTY}"
+	@echo "Git Repository URL: ${GIT_REPO_URL}"
+	@echo ""
+	@echo "Go  Version:        ${GOVERSION}"
+	@echo "GO  OS:             ${GOOS}"
+	@echo "GO  ARCH:           ${GOARCH}"
 
 log-%:
 	@grep -h -E '^$*:.*?## .*$$' $(MAKEFILE_LIST) | \
