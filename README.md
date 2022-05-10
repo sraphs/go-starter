@@ -1,5 +1,7 @@
 # go-starter
 
+[![CI](https://github.com/sraphs/go-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/sraphs/go-starter/actions/workflows/ci.yml)
+
 >  Go project template repository
 
 
