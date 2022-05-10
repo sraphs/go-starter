@@ -2,8 +2,6 @@ name: Release
 
 on:
   push:
-    branches:
-      - "main"
     tags:
       - v*
 
@@ -17,6 +15,7 @@ jobs:
       - name: "Checkout repository"
         uses: actions/checkout@v3
         with:
+          ref: ${{ github.event.push.ref }}
           fetch-depth: 0
       - name: "Setup go environment"
         uses: actions/setup-go@v3
