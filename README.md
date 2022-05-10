@@ -45,7 +45,7 @@ We alway welcome your contributions :clap:
 
 
 ## CHANGELOG
-See [Releases](/releases)
+See [Releases](https://github.com/sraphs/go-starter/releases)
 
 ## License
 [MIT © sraph.com](./LICENSE)
