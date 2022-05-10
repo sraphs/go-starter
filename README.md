@@ -43,8 +43,7 @@ We alway welcome your contributions :clap:
 
 
 ## CHANGELOG
-See [CHANGELOG.md](./CHANGELOG.md)
-
+See [Releases](/releases)
 
 ## License
 [MIT © sraph.com](./LICENSE)

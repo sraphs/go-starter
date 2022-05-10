@@ -27,7 +27,7 @@ LDFLAGS ?= "-s -w -X main.version=$(VERSION)"
 .PHONY: init
 init: ## Init environment
 	@ $(MAKE) --no-print-directory log-$@
-	go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
+	go install github.com/goreleaser/goreleaser@latest
 
 .PHONY: rename
 rename: ## Rename Go module refactoring
