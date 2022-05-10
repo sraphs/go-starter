@@ -1,8 +1,14 @@
 
+<a name="v1.0.4"></a>
+## [v1.0.4](https://github.com/sraphs/go-starter.git/compare/1.0.3...v1.0.4)
+
+> 2022-05-10
+
+
 <a name="1.0.3"></a>
 ## [1.0.3](https://github.com/sraphs/go-starter.git/compare/v1.0.3...1.0.3)
 
-> 0001-01-01
+> 2022-05-10
 
 
 <a name="v1.0.3"></a>
