@@ -1,0 +1,32 @@
+changelog:
+  categories:
+    - title: ✨Features
+      labels:
+        - ✨feat
+    - title: 🐞Bug Fixes
+      labels:
+        - 🐞fix
+    - title: 📄Documentations
+      labels:
+        - 📄docs
+    - title: 🌈Style Improvements
+      labels:
+        - 🌈style
+    - title: ⚙️Code Refactoring
+      labels:
+        - ⚙️refactor
+    - title: 🕜Performance Improvements
+      labels:
+        - 🕜perf
+    - title: ✅Tests
+      labels:
+        - ✅test
+    - title: 🚀Chores
+      labels:
+        - 🚀chore
+    - title: ⏪Reverts
+      labels:
+        - ⏪revert
+    - title: Other Changes
+      labels:
+        - "*"
