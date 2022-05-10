@@ -2,17 +2,15 @@ name: Release
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    types: [opened, reopened, synchronize]
+    tags:
+      - '*'
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
+      - uses: google-github-actions/release-please-action@v3
+        with:
+          release-type: go
+          package-name: release-please-action
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false}]'
