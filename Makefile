@@ -57,7 +57,7 @@ clean: ## Clean workspace
 	go clean
 
 .PHONY: check 
-check: test vet lint ## Run tests and linters
+check: test lint ## Run tests and linters
 
 .PHONY: test
 test: ## Run tests
