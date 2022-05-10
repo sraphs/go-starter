@@ -4,13 +4,8 @@ on:
   push:
     branches:
       - "main"
-      - "releases/**"
     tags:
       - v*
-  pull_request:
-    branches:
-      - "releases/**"
-    types: [opened, reopened, synchronize]
 
 env:
   GO_VERSION: 1.18
@@ -39,15 +34,6 @@ jobs:
         run: |
           echo "VERSION=$(git describe --tags --always)" >> $GITHUB_ENV
           echo "GIT_REPO_URL=$(git remote get-url origin | sed -e 's|git@\(.*\):\(.*\)\.git|https://\1/\2|g')" >> $GITHUB_ENV
-      - name: Install dependencies
-        run: |
-          go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
-      - name: Generate CHANGELOG.md
-        run: |
-          git-chglog --config=.github/CHANGELOG/config.yml --repository-url=${GIT_REPO_URL} -o CHANGELOG.md ${VERSION}
-          git add CHANGELOG.md
-          git commit -m "📄docs: update changelog for ${VERSION}"
-          git push origin main
       - name: GoReleaser
         uses: goreleaser/goreleaser-action@v1
         with:
