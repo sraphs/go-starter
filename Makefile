@@ -39,7 +39,7 @@ rename: ## Rename Go module refactoring
 		&& echo -n "Are you sure? [y/N]" \
 		&& read ans && [ $${ans:-N} = y ] \
 		&& echo -n "Please wait..." \
-		&& find . -type f -not -path '*/\.*' -exec sed -i "s|${MOD_NAME}|$${new_module_name}|g" {} \; \
+		&& find . -type f -not -path '*/\.git*' -exec sed -i "s|${MOD_NAME}|$${new_module_name}|g" {} \; \
 		&& echo "new go module-name: '$${new_module_name}'!" \
         && git add . && git commit -m "rename go module-name to '$${new_module_name}'"
 
