@@ -28,7 +28,7 @@ LDFLAGS ?= "-s -w -X main.version=$(VERSION)"
 init: ## Init environment
 	@ $(MAKE) --no-print-directory log-$@
 	go install github.com/goreleaser/goreleaser@latest
-	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin 
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin 
 
 .PHONY: rename
 rename: ## Rename Go module refactoring
